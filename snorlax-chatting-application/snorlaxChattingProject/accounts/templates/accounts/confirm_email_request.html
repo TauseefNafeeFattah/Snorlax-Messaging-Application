@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Email Confirmation</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/main.css' %}">
+  </head>
+  <body class = "prevent-scrolling">
+    <div class="vertical-center alternative-background">
+    <div>
+      <div class="card">
+        <div>
+          <div class="text">
+            A verification link has been sent to your email. You have to confirm your email
+            before you can login. If you have already confirmed your email please
+             click <a href={% url 'accounts:login'%}>here</a> to login.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

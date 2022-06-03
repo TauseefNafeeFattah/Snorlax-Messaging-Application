@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Chat</title>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- bootstrap js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- icon css link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- internal css -->
+    <link rel="stylesheet" href="{% static 'chatPage/css/mainPage.css' %}">
+  </head>
+  <body>
+
+    <!-- left pane which contains the search bar and the friends list  -->
+    <div class="left-pane">
+      <div class="search">
+        <form class="search-bar">
+          {% csrf_token %}
+          <input id="search_input"type="text" placeholder="Search" />
+          <button type="submit" class = "search-button"><i class="fa fa-search"></i></button>
+        </form>
+        <div id="search_result_box" class="search_list not-visible"></div>
+      </div>
+        <div id="contact_list" class = "person-list">
+          {% for chat in chat_list %}
+            <div onclick='location.href="{% url 'chatPage:chat' chat.id %}";' class="one-person">
+              {% for user in chat.participants.all %}
+                {% if user.username != current_user.username %}
+                  <div class="name">{{user.username}}</div>
+                  {% if chat.chat_messages.all %}
+                    {% with last_message=chat.get_last_message %}
+                    {% with last_message_content_short=last_message.content|slice:"0:25"%}
+                    <div class="message">
+                      {{last_message_content_short}}
+                    </div>
+                    {% endwith %}
+                    {% endwith %}
+                  {%else%}
+                    <div class="message">
+                      No messages yet
+                    </div>
+                  {%endif%}
+                {% endif %}
+              {% endfor %}
+            </div>
+          {%endfor%}
+      </div>
+      <div class="logout-button-div">
+        <a href={% url 'accounts:logout'%} class="btn btn-secondary logout-button">Log Out</a>
+      </div>
+    </div>
+
+      {% if current_chat %}
+        <div class="right-pane alternative-background">
+          <div class = "right-pane-header">
+            <header class="page-header">
+              {% for user in current_chat.participants.all %}
+                {% if user.username != current_user.username %}
+                  <h2 >{{user.username}}</h2>
+                {%endif%}
+              {% endfor %}
+<!--           icon on the right giving the option to delete the chat -->
+            </header>
+          </div>
+          <div class = message-body>
+            <ul class="chat-log" id = 'chat-log'>
+            </ul>
+          </div>
+          <div class="message-input">
+            <input id="chat-message-input" type="text" placeholder="Write your message..." />
+            <button id="chat-message-submit" class="submit btn btn-info">Send</button>
+          </div>
+        </div>
+      {% else %}
+        <div class="right-pane alternative-background">
+          <img class = "no-chat-image" src="{% static 'chatPage/images/snorlax_main_page_bg.png' %}"  alt="snorlax bg logo">
+        </div>
+      {% endif %}
+
+  </body>
+  <!-- <script src = "{% static 'chatPage/js/main.js' %}"></script> -->
+  <script src="{% static 'chatPage/js/reconnecting-websocket.js' %}"></script>
+  <script>
+
+    var chatID = {{chatID_json}};
+    var username = {{username}};
+
+    if (chatID){
+      var chatSocket = new ReconnectingWebSocket(
+      'ws://' + window.location.host + '/ws/chat/' + chatID + '/'
+      );
+    }
+    if(chatSocket){
+      chatSocket.onopen = function(e){
+        fetchMessages();
+      }
+      chatSocket.onmessage = function(e){
+        var data = JSON.parse(e.data);
+        if (data['command'] == 'messages'){
+          for (let i = 0; i < data['messages'].length; i++ ) {
+            createMessage(data['messages'][i]);
+          }
+        }
+        else if (data['command'] == 'new_message'){
+          createMessage(data['message']);
+        }
+      };
+      chatSocket.onclose = function(e){
+        console.error('Chat socket closed unexpectedly');
+      };
+    }
+    if (document.querySelector('#chat-message-input')){
+      document.querySelector('#chat-message-input').onkeyup = function(e){
+        if (e.keyCode == 13){
+          document.querySelector('#chat-message-submit').click();
+        }
+      };
+      document.querySelector('#chat-message-submit').onclick = function(e){
+        var messageInputDom = document.getElementById('chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+          'command':'new_message',
+          'message':message,
+          'from':username,
+          'chatID':chatID
+        }));
+        messageInputDom.value = '';
+      };
+    }
+
+    function fetchMessages(){
+      chatSocket.send(JSON.stringify({
+        'command':'fetch_messages',
+        'chatID':chatID
+      }));
+    }
+    function createMessage(data){
+      var author = data['author'];
+      var messageListTag = document.createElement('li');
+      var h3NameTag = document.createElement('h3');
+      var divMessageTag = document.createElement('div');
+      divMessageTag.textContent = data.content;
+
+      h3NameTag.textContent = author;
+      h3NameTag.className = "chat-log__author";
+      divMessageTag.className = "chat-log__message"
+
+      if (author == username){
+        messageListTag.className = 'chat-log__item chat-log__item--own';
+      }
+      else{
+        messageListTag.className = 'chat-log__item';
+      }
+
+      messageListTag.appendChild(h3NameTag);
+      messageListTag.appendChild(divMessageTag);
+      document.querySelector('#chat-log').appendChild(messageListTag);
+    }
+
+
+    // search result
+    const url= window.location.href;
+    const search_input = document.getElementById('search_input');
+    const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    const searchResultBox = document.getElementById('search_result_box');
+    const contactList = document.getElementById('contact_list');
+
+    $(document).mouseup(function(e){
+      var container = $(".search");
+      // if the target of the click isn't the container nor a descendant of the container
+      if (!container.is(e.target) && container.has(e.target).length === 0){
+        if (!searchResultBox.classList.contains('not-visible'))
+        {
+          $("#search_input").val("");
+          searchResultBox.classList.add('not-visible');
+          if(contactList.classList.contains('not-visible'))
+          {
+            contactList.classList.remove('not-visible');
+          }
+        }
+      }
+    });
+
+    const sendSearchData = (contact_name) => {
+      $.ajax({
+        type: 'POST',
+        url: '/search/',
+        data:{
+          'csrfmiddlewaretoken': csrf,
+          'contact_name': contact_name,
+        },
+        success: (res) =>{
+          const data = res.data;
+          document.getElementById('search_result_box').innerHTML = ""
+          if (Array.isArray(data)){
+
+            data.forEach(contact => {
+              document.getElementById('search_result_box').innerHTML  +=
+                " <div id ='"+contact.name+"'class='search-person'><h5 class='search-name'>"+contact.name+"</h5></div>";
+
+              document.getElementById(contact.name).setAttribute("onclick","location.href=\""+contact.url+"\";");
+            });
+
+          }
+        },
+        error: (err)=>{
+          console.log(err)
+        }
+      })
+    }
+
+    search_input.addEventListener('keyup', function(e){
+      // make the search result box visible and everything else invisible
+
+      if(e.target.value.length == 0){
+
+        if (!searchResultBox.classList.contains('not-visible'))
+        {
+          searchResultBox.classList.add('not-visible');
+          if(contactList.classList.contains('not-visible'))
+          {
+            contactList.classList.remove('not-visible');
+          }
+        }
+      }
+      else{
+        if (searchResultBox.classList.contains('not-visible'))
+        {
+          searchResultBox.classList.remove('not-visible');
+          if(!contactList.classList.contains('not-visible'))
+          {
+            contactList.classList.add('not-visible');
+          }
+        }
+      }
+      sendSearchData(e.target.value);
+    });
+
+  </script>
+</html>

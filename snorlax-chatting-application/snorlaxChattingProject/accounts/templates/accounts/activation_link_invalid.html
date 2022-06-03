@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Invalid Link</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/main.css' %}">
+  </head>
+  <body class = "prevent-scrolling">
+    <div class="vertical-center alternative-background">
+    <div>
+      <div class="card">
+        <div>
+          <div class="text">
+            Activation link is invalid please try signing up again. Please
+            click <a href={% url 'accounts:signup'%}>here</a> to signup.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

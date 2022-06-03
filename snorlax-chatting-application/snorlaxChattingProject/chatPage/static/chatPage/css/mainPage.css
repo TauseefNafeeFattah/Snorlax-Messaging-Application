@@ -1,0 +1,251 @@
+/* css reset */
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+   scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* reset done */
+body {
+	background: #E5DDD5;
+  overflow: hidden;
+}
+.left-pane{
+  width:22%;
+  float:left;
+  /* background-color: #dbddd5; */
+  background-color: #d9ebe9d6;
+  height:100vh;
+  display: flex;
+  flex-direction: column;
+}
+.right-pane{
+  margin-left: 22%;
+/*   padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 5px; */
+  height: 100vh; /* full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+.right-pane-header{
+  height:5%;
+  width:100%;
+  margin-bottom:3%;
+}
+.page-header {
+	/* background: #006A4E; */
+  background: #004a6a;
+	margin: 0;
+  padding: 1.5%;
+	color: #FFFFFF;
+	position: fixed;
+	width: 100%;
+  z-index: 1;
+}
+.username{
+  margin-left: 1%;
+  font-size: large;
+}
+.message-body{
+  flex: 1; /* fill the remaining space */
+  min-height: 0; /* optional */
+  overflow: auto; /* overflow if exceeds available space */
+  padding:2%;
+  /* hide the scrollbar*/
+  /* -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  /* scrollbar-width: none;
+
+  ::-webkit-scrollbar {
+    display: none; */
+
+}
+.message-input{
+  flex: 0 0 auto; /* don't grow or shrink in any case */
+  margin-top: 1%
+}
+.message-input input{
+  min-width:90%;
+  max-width: 90%;
+  padding:1%;
+  margin-left: 1%;
+  border-radius: 5px;
+  border: solid lightcyan;
+  background-color: white;
+  color:black;
+  margin-bottom:.5%;
+  min-height: 10%;
+}
+.message-input input:focus{
+  border: solid lightcyan;
+  background-color: white;
+}
+.btn-info{
+  min-width: 7%;
+  max-width: 7%;
+  padding: 1%;
+}
+.chat-log {
+	height: auto;
+	overflow: auto;
+  list-style-type: none;
+}
+.chat-log__item {
+	/* background: #fafafa; */
+  background: #aae6e7;
+	padding: 10px;
+  margin-top: 1% !important;
+	max-width: 80%;
+	float: left;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0,0,0,.1);
+	clear: both;
+  margin:0;
+}
+
+.chat-log__item.chat-log__item--own {
+	float: right;
+	/* background: #DCF8C6; */
+  background: #f0f8c6;
+	text-align: right;
+}
+
+
+.chat-log__author {
+	margin: 0 auto .5em;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.search-bar{
+  width:100%;
+  border: 2px solid black;
+  background-color: white;
+  z-index: 1;
+}
+.search-bar input[type="text"]{
+  padding: 5%;
+  width: 85%;
+  border-style: none;
+}
+.search-button{
+  border-style: none;
+}
+.search-button i{
+  color:grey;
+}
+
+.person-list{
+  border:1px solid grey;
+  height:100vh;
+  flex: 1;
+  border-bottom: 0px;
+  overflow: auto; /* overflow if exceeds available space */
+}
+
+.one-person{
+  background-color:white;
+  padding: 5%;
+  border-bottom:1px solid grey;
+}
+.one-person .name{
+  font-weight: bold;
+}
+.not-visible{
+  display: none;
+}
+.search{
+  background: #fcfff9;
+  border-bottom: 1px solid lightgrey;
+  border-radius: 0 0 10px 10px;
+}
+.search_list{
+  border:1px solid grey;
+  flex: 1;
+  overflow: auto; /* overflow if exceeds available space */
+  height: 68vh;
+}
+.search-name{
+  font-weight: bold;
+  margin-left:3%;
+  padding: 3%;
+}
+.alternative-background{
+  background: linear-gradient(to bottom right, #f5f7fa , #c3cfe2);
+}
+
+.logout-button-div{
+  flex: 0 0 auto; /* don't grow or shrink in any case */
+  margin-top: 1%;
+}
+.logout-button{
+  width: 100%
+}

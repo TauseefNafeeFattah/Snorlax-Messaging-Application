@@ -1,0 +1,57 @@
+body{
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: table;
+  position: absolute;
+}
+.btn:hover{
+    color: #f9af42;
+    background-color: #13a7a5;
+}
+
+a:link {
+    color: #0d6efd;
+    background-color: transparent;
+    text-decoration: none;
+  }
+
+a:visited {
+color: #0d6efd;
+background-color: transparent;
+text-decoration: none;
+}
+
+a:hover {
+color:  #f9af42;
+background-color: transparent;
+text-decoration: underline;
+}
+
+a:active {
+color:  #f9af42;
+background-color: transparent;
+text-decoration: underline;
+}
+
+.vertical-center{
+  display: table-cell;
+  vertical-align: middle;
+}
+.alternative-background{
+  background: linear-gradient(to bottom right, #f5f7fa , #c3cfe2);
+}
+
+
+/* login page */
+.login-image{
+  height: 150px;
+}
+.card-title{
+  text-align: center;
+}
+.card{
+  width: 50%;
+  margin: auto;
+}

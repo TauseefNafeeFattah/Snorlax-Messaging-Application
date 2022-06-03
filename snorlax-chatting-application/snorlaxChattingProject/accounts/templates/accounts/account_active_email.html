@@ -1,0 +1,6 @@
+{% autoescape off %}
+Hi {{ user.username }},
+Please click on the link to confirm your registration and then you will be redirected to the login page,
+http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+If you think, it's not you or you have already confirmed your registration, then just ignore this email.
+{% endautoescape %}
