@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'channels',
     'chatPage',
+    'rsa',
 ]
 
 MIDDLEWARE = [
