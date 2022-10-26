@@ -1,4 +1,5 @@
 import json
+import rsa
 from channels.generic.websocket import WebsocketConsumer
 from .models import Message
 from django.contrib.auth import get_user_model
@@ -10,6 +11,8 @@ User = get_user_model()
 
 class ChatConsumer(WebsocketConsumer):
 
+    publicKey, privateKey = rsa.newkeys(512)
+    
     def fetch_messages(self, data):
         # gets the last 10 messages of the chat from the database
 
@@ -27,6 +30,9 @@ class ChatConsumer(WebsocketConsumer):
         author = get_author(data["from"])
 
         content_message = data["message"]
+        
+        content_message = rsa.encrypt(content_message.encode(), publicKey)
+        
         message = Message.objects.create(
             author=author,
             content=content_message,
@@ -53,7 +59,7 @@ class ChatConsumer(WebsocketConsumer):
         return {
             "id": message.id,
             "author": message.author.username,
-            "content": message.content,
+            "content": rsa.decrypt(message.content, privateKey).decode(),
             "timestamp": str(message.timestamp)
         }
 
