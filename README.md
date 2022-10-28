@@ -1,5 +1,5 @@
 # Snorlax-Messaging-Application
-A Django real time chatting application. Users can create profiles with email verification. Users can search for other users and chat with with them. Furthermore, users can send invitation to participants to join group chats and the participant can choose whether to accept or deny the invitation. The chats are encrypted, so privacy is ensured
+A Django real time chatting application. Users can create profiles with email verification. Users can search for other users and chat with them. Furthermore, users can send invitations to participants to join group chats and the participant can choose whether to accept or deny the invitation. The chats are encrypted before they are stored in the database, so privacy is ensured
 ## Tech Stacks Used:
 Django - Django is the main framework used to create the web application
 
