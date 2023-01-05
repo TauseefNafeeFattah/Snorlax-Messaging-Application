@@ -142,14 +142,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = "chatPage:homepage"
 LOGOUT_REDIRECT_URL = "accounts:login"
 # email setting
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# MAILER_EMAIL_BACKEND = EMAIL_BACKEND
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_PASSWORD = 'Syn@20190401'
-# EMAIL_HOST_USER = 'tauseefnafee@gmail.com'
-# EMAIL_PORT = 465
-# EMAIL_USE_SSL = True
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND
